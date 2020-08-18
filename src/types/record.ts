@@ -1,5 +1,5 @@
 import { Runtype, Static, create, innerValidate } from '../runtype';
-import { hasKey } from '../util';
+import { hasKey, pick as pickByKey, omit as omitByKey } from '../util';
 import show from '../show';
 
 type RecordStaticType<
@@ -29,6 +29,8 @@ export interface InternalRecord<
   asPartial(): InternalRecord<O, true, RO, EX>;
   asReadonly(): InternalRecord<O, Part, true, EX>;
   exact(): InternalRecord<O, Part, RO, true>;
+  pick<K extends keyof O>(keys: K[]): InternalRecord<Pick<O, K>, Part, RO, EX>;
+  omit<K extends keyof O>(keys: K[]): InternalRecord<Omit<O, K>, Part, RO, EX>;
 }
 
 export type Record<
@@ -116,6 +118,8 @@ function withExtraModifierFuncs<
   A.asPartial = asPartial;
   A.asReadonly = asReadonly;
   A.exact = exact;
+  A.pick = pick;
+  A.omit = omit;
 
   return A;
 
@@ -128,5 +132,13 @@ function withExtraModifierFuncs<
   }
   function exact() {
     return InternalRecord(A.fields, A.isPartial, A.isReadonly, true);
+  }
+
+  function pick<K extends keyof O>(keys: K[]): InternalRecord<Pick<O, K>, Part, RO, EX> {
+    return InternalRecord(pickByKey(A.fields, keys), A.isPartial, A.isReadonly, A.isExact);
+  }
+
+  function omit<K extends keyof O>(keys: K[]): InternalRecord<Omit<O, K>, Part, RO, EX> {
+    return InternalRecord(omitByKey(A.fields, keys), A.isPartial, A.isReadonly, A.isExact);
   }
 }
