@@ -9,8 +9,7 @@
     "format": "node scripts/format.js",
     "test": "jest $([ \"$CI\" = true ] && echo --coverage || echo --watch)",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "typecheck": "tsc --noEmit --watch",
-    "postinstall": "npm run build"
+    "typecheck": "tsc --noEmit --watch"
   },
   "author": "Thomas Crockett",
   "license": "MIT",
@@ -19,7 +18,8 @@
     "coveralls": "^3.0.6",
     "jest": "24.9.0",
     "prettier": "^1.19.1",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "typescript": "^4.1.2"
   },
   "keywords:": [
     "runtime",
@@ -42,8 +42,5 @@
       "\\.ts$": "ts-jest"
     },
     "testEnvironment": "node"
-  },
-  "dependencies": {
-    "typescript": "^4.1.2"
   }
 }
